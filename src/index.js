@@ -1,4 +1,9 @@
 function intervalMatches(interval, count) {
+  if (interval.indexOf('-inf') === 0) {
+    var p = interval.split('-');
+    return count <= parseInt(p[2], 10);
+  }
+
   if (interval.indexOf('-') > -1) {
     var p = interval.split('-');
     if (p[1] === 'inf') {
@@ -14,7 +19,6 @@ function intervalMatches(interval, count) {
     return match === count;
   }
 }
-
 
 export default {
   name: 'interval',

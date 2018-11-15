@@ -33,10 +33,13 @@ describe('interval plural', () => {
       i18next.addResourceBundle('en', 'test3', {
         key3: '{{count}} item',
         key3_plural: '{{count}} items',
-        key3_interval: '(1) {one item}; (2-7) {a few items}; (7-inf) {a lot of items};',
         key4: '{{count}} item',
         key4_plural: '{{count}} items',
         key4_interval: '(1){one item}; (2-7){a few items}; '
+      });
+      i18next.addResourceBundle('en', 'test4', {
+        key5_interval: '(-inf-0){negative items};(1){one item};(2-7){a few items};(7-inf){a lot of items};',
+        key6_interval: '(-inf-10){low number of items};(11){11 items};(12-inf){a lot of items};',
       });
       i18next.setDefaultNamespace('test1');
     });
@@ -60,7 +63,16 @@ describe('interval plural', () => {
 
       {args: ['key4_interval', { ns: 'test3', postProcess: 'interval', count: 1}], expected: 'one item'},
       {args: ['key4_interval', { ns: 'test3', postProcess: 'interval', count: 3}], expected: 'a few items'},
-      {args: ['key4_interval', { ns: 'test3', postProcess: 'interval', count: 100}], expected: '100 items'}
+      {args: ['key4_interval', { ns: 'test3', postProcess: 'interval', count: 100}], expected: '100 items'},
+
+      {args: ['key5_interval', { ns: 'test4', postProcess: 'interval', count: 1}], expected: 'one item'},
+      {args: ['key5_interval', { ns: 'test4', postProcess: 'interval', count: 3}], expected: 'a few items'},
+      {args: ['key5_interval', { ns: 'test4', postProcess: 'interval', count: 100}], expected: 'a lot of items'},
+      {args: ['key5_interval', { ns: 'test4', postProcess: 'interval', count: -100}], expected: 'negative items'},
+      {args: ['key6_interval', { ns: 'test4', postProcess: 'interval', count: 10}], expected: 'low number of items'},
+      {args: ['key6_interval', { ns: 'test4', postProcess: 'interval', count: -10}], expected: 'low number of items'},
+      {args: ['key6_interval', { ns: 'test4', postProcess: 'interval', count: 11}], expected: '11 items'},
+      {args: ['key6_interval', { ns: 'test4', postProcess: 'interval', count: 100}], expected: 'a lot of items'}
     ];
 
     tests.forEach((test) => {
